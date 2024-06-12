@@ -1,26 +1,30 @@
-import React, {useState, useEffect} from 'react'
-import {code, redirectToAuthCodeFlow, getAccessToken, fetchProfile, clientId} from './api/apiToken';
-import {} from './api/apiToken';
-import Searchbar from './components/searchbar';
+import React, {useState} from 'react'
+import { redirectToAuthCodeFlow, code, clientId, getAccessToken, fetchProfile } from './api/apiToken';
 import './App.css';
 
-if (!code) {
-    redirectToAuthCodeFlow(clientId);
-} else {
-  const accessToken = await getAccessToken(clientId, code);
-  const profile = await fetchProfile(accessToken);
-  console.log(profile)
-}
-
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
+  const [token, setToken] = useState(null);
+ 
 
-        <Searchbar />
-      </header>
+  const handleAuthFlow = async () => {
+    try {
+        const token = await getAccessToken(clientId, code);
+        console.log(token)
+        const profile = await fetchProfile(token);
+        setToken(token)
+    
+    } catch(error) {
+      console.error(error)
+    }
+  }
+  
+  return (
+    
+    <div className='App'>
+  
+      
     </div>
-  );
+  )
 }
 
 export default App;
