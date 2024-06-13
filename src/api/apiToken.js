@@ -1,7 +1,11 @@
 export const clientId = '63f74899ca954c22aa8844c796fdfbbc'; 
+const client_secret = '6534060f70e9414fb4f676283d4b4a7a'; 
+
 const redirectUrl = 'http://localhost:3000';
 const params = new URLSearchParams(window.location.search);
 export const code = params.get("code")
+const scope = "user-read-private user-read-email"
+
 
 function generateCodeVerifier(length) {
   let text = '';
@@ -22,21 +26,20 @@ async function generateCodeChallenge(codeVerifier) {
       .replace(/=+$/, '');
 }
 
-
 export async function redirectToAuthCodeFlow(clientId) {
-  // debugger
   const verifier = generateCodeVerifier(128);
   const challenge = await generateCodeChallenge(verifier);
 
   localStorage.setItem("verifier", verifier);
 
-  const params = new URLSearchParams();
-  params.append("client_id", clientId);
-  params.append("response_type", "code");
-  params.append("redirect_uri", redirectUrl);
-  params.append("scope", "user-read-private user-read-email");
-  params.append("code_challenge_method", "S256");
-  params.append("code_challenge", challenge);
+  const params = new URLSearchParams({
+    response_type: 'code',
+    client_id: clientId, 
+    scope, 
+    code_challenge_method: 'S256',
+    code_challenge: challenge,
+    redirect_uri: redirectUrl
+  });
 
   console.log(params.toString())
 
@@ -45,26 +48,25 @@ export async function redirectToAuthCodeFlow(clientId) {
 
 export async function getAccessToken(clientId, code) {
   const verifier = localStorage.getItem("verifier");
-
+  
   const response = await fetch("https://accounts.spotify.com/api/token", {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
+     'Content-Type': 'application/x-www-form-urlencoded'
     },
     body: new URLSearchParams({
-      client_id: clientId,
-      grant_type: 'authorization_code',
-      code: code,
-      redirect_uri: redirectUrl,
-      code_verifier: verifier,
-    }),
-  
+        grant_type: 'authorization_code',
+        code: code,
+        redirect_uri: redirectUrl,
+        client_id: clientId,
+        code_verifier: verifier,
+    })
+    
   });
-
-  const { access_token } = await response.json();
-  
-  return access_token
+  const data = await response.json();
+  console.log(data.error)
 }
+
 
 export async function fetchProfile(token) {
   const result = await fetch("https://api.spotify.com/v1/me", {
