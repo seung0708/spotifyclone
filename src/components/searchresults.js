@@ -1,6 +1,10 @@
-const Searchresults = () => {
+const Searchresults = ({songs}) => {
   return (
-    <div>Searchresults</div>
+    <div>
+      {songs.map(song => (
+        <h2>{song.name}</h2>
+      ))}
+    </div>
   )
 }
 

@@ -1,41 +1,70 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useRef} from 'react'
 import { redirectToAuthCodeFlow, code, clientId, getAccessToken, fetchProfile } from './api/apiToken';
+import { searchTrackApi } from './api/searchApi';
 import Searchbar from './components/searchbar';
+import Searchresults from './components/searchresults'
 import './App.css';
 
 function App() {
+  const [term, setTerm] = useState('');
   const [token, setToken] = useState(null);
   const [profile, setProfile] = useState(null);
+  const [songs, setSongs] = useState([]);
+  const hasFetchedData = useRef(false);
+
+  const handleChange = (e) => {
+    setTerm(e.target.value)
+  }
+
+  const handleSearch = async(e) => {
+    e.preventDefault();
+    const tracks = await searchTrackApi(token, term);
+    console.log(tracks)
+    setSongs([...tracks])
+    console.log(songs)
+  }
   
   useEffect(() => {
+    if (hasFetchedData.current) return
     let ignore = false;
-    const handleAuthFlow = async () => {
-      if(!code) {
-        console.log("Redirecting to auth code flow");
-        redirectToAuthCodeFlow(clientId)
-      } else {
+    const handleAccessToken = async () => {
         console.log("Fetching access token");
         const access_token = await getAccessToken(clientId, code);
-        console.log(access_token)
-        if (!ignore) {
+        const profile = await fetchProfile(access_token)
+        if(!ignore) {
           setToken(access_token)
-          const profile = await fetchProfile(token);
-          setProfile(profile);
+          setProfile(profile)
         }
-      }
     }
-    handleAuthFlow()
+    handleAccessToken()
+
+    hasFetchedData.current = true; // Set ref to true after fetching
 
     return () => {
-      ignore = true
+      ignore = true;
     }
 
   },[])
  
   return (
-    <div className='App'>
-
-    </div>
+    !code ? redirectToAuthCodeFlow(clientId) :
+    (
+      <div className='App'>
+        {profile ? (
+          <>
+          <h1>Welcome, {profile.display_name}</h1>
+          <Searchbar 
+            onChange={handleChange}
+            onSearch={handleSearch}
+          />
+          <Searchresults songs={songs} />
+          </>
+        ): 
+        (
+          <p>Loading...</p>
+        )}
+      </div>
+    )
   )
 
 }

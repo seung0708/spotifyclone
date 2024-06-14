@@ -48,7 +48,7 @@ export async function redirectToAuthCodeFlow(clientId) {
 
 export async function getAccessToken(clientId, code) {
   const verifier = localStorage.getItem("verifier");
-  
+
   const response = await fetch("https://accounts.spotify.com/api/token", {
     method: 'POST',
     headers: {
@@ -61,12 +61,17 @@ export async function getAccessToken(clientId, code) {
         client_id: clientId,
         code_verifier: verifier,
     })
-    
   });
   const data = await response.json();
-  console.log(data.error)
-}
+  console.log(data);
+  if (!(Date.now() >= data.expires_in * 1000)) {
+    const refreshToken = getRefreshToken()
+    console.log(refreshToken)
+  } else {
+    return data.access_token
+  }
 
+}
 
 export async function fetchProfile(token) {
   const result = await fetch("https://api.spotify.com/v1/me", {
@@ -75,3 +80,27 @@ export async function fetchProfile(token) {
 
   return await result.json();
 }
+
+const getRefreshToken = async () => {
+
+  // refresh token that has been previously stored
+  const refreshToken = localStorage.getItem('refresh_token');
+  const url = "https://accounts.spotify.com/api/token";
+
+   const payload = {
+     method: 'POST',
+     headers: {
+       'Content-Type': 'application/x-www-form-urlencoded'
+     },
+     body: new URLSearchParams({
+       grant_type: 'refresh_token',
+       refresh_token: refreshToken,
+       client_id: clientId
+     }),
+   }
+
+   const response = await fetch(url, payload);
+
+   localStorage.setItem('access_token', response.accessToken);
+   localStorage.setItem('refresh_token', response.refreshToken);
+ }
