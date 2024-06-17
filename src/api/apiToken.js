@@ -1,5 +1,5 @@
-export const clientId = '63f74899ca954c22aa8844c796fdfbbc'; 
-const client_secret = '6534060f70e9414fb4f676283d4b4a7a'; 
+export const clientId = ''; 
+
 
 const redirectUrl = 'http://localhost:3000';
 const params = new URLSearchParams(window.location.search);

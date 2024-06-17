@@ -1,9 +1,10 @@
+import Track from './track'
 const Searchresults = ({songs}) => {
-  return (
-    <div>
-      {songs.map(song => (
-        <h2>{song.name}</h2>
-      ))}
+    return (
+    <div className="songs_results">
+      {songs.map(song => 
+      <Track song={song} />      
+    )}
     </div>
   )
 }

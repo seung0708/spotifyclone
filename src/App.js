@@ -19,9 +19,7 @@ function App() {
   const handleSearch = async(e) => {
     e.preventDefault();
     const tracks = await searchTrackApi(token, term);
-    console.log(tracks)
     setSongs([...tracks])
-    console.log(songs)
   }
   
   useEffect(() => {
