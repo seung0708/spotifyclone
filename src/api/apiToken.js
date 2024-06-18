@@ -4,7 +4,7 @@ export const clientId = '63f74899ca954c22aa8844c796fdfbbc';
 const redirectUrl = 'http://localhost:3000';
 const params = new URLSearchParams(window.location.search);
 export const code = params.get("code")
-const scope = "user-read-private user-read-email"
+const scope = "user-read-private user-read-email playlist-modify-public"
 
 
 function generateCodeVerifier(length) {

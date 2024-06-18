@@ -8,7 +8,7 @@ const Track = ({song, onAdd}) => {
   
   return (
     <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '2rem'}}>
-        <h2>{song.title}</h2>
+        <h2>{song.name}</h2>
         <p>{song.album}</p>
         <p>{song.artist}</p>
         <button onClick={handleAddTrack}>+</button>

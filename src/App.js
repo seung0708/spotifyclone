@@ -1,5 +1,6 @@
 import React, {useEffect, useState, useCallback, useRef} from 'react'
 import { redirectToAuthCodeFlow, code, clientId, getAccessToken, fetchProfile } from './api/apiToken';
+import {saveToSpotify} from './api/saveToSpotify'
 import { searchTrackApi } from './api/searchApi';
 import Searchbar from './components/searchbar';
 import Searchresults from './components/searchresults'
@@ -28,7 +29,12 @@ function App() {
 
   const removeTrack = useCallback(song => {
     setPlaylist(prevSongs => prevSongs.filter(currentSong => currentSong.id !== song.id))
-  })
+  },[])
+
+  const updatePlaylistName = useCallback((name) => {
+    setPlaylistName(name);
+    console.log(playlistName)
+  }, []);
 
 
   const handleSearch = async(e) => {
@@ -58,6 +64,14 @@ function App() {
     }
 
   },[])
+
+  const savePlaylist = useCallback(() => {
+    const trackUris = playlist.map((song) => console.log(song));
+    saveToSpotify(token, playlistName, trackUris).then(() => {
+      setPlaylistName("New Playlist");
+      setPlaylist([]);
+    });
+  }, [playlistName, playlist]);
  
   return (
     !code ? redirectToAuthCodeFlow(clientId) :
@@ -78,6 +92,8 @@ function App() {
                 playlistName={playlistName}
                 playlist={playlist}
                 onRemove={removeTrack}
+                onNameChange={updatePlaylistName}
+                onSave={savePlaylist}
               />
             </div>
           </div>
