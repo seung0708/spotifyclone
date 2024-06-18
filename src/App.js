@@ -26,6 +26,10 @@ function App() {
     []
   );
 
+  const removeTrack = useCallback(song => {
+    setPlaylist(prevSongs => prevSongs.filter(currentSong => currentSong.id !== song.id))
+  })
+
 
   const handleSearch = async(e) => {
     e.preventDefault();
@@ -73,6 +77,7 @@ function App() {
               <Playlist 
                 playlistName={playlistName}
                 playlist={playlist}
+                onRemove={removeTrack}
               />
             </div>
           </div>
