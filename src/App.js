@@ -66,7 +66,7 @@ function App() {
   },[])
 
   const savePlaylist = useCallback(() => {
-    const trackUris = playlist.map((song) => console.log(song));
+    const trackUris = playlist.map((song) => song.uri);
     saveToSpotify(token, playlistName, trackUris).then(() => {
       setPlaylistName("New Playlist");
       setPlaylist([]);

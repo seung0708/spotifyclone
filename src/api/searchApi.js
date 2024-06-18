@@ -5,13 +5,15 @@ export const searchTrackApi = async (access_token, term) => {
         }
     })
     const data = await response.json();
-    console.log(data)
+    console.log(data.tracks.items)
+
     return data.tracks.items.map(track => (
         {
             id: track.id,
             name: track.name, 
             artist: track.artists[0].name, 
-            album: track.album.name
+            album: track.album.name,
+            uri: track.uri
         }
     ))
 }

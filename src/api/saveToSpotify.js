@@ -39,6 +39,5 @@ export async function saveToSpotify(token, name, songUris) {
         body: JSON.stringify({uris: songUris})
     })
 
-    const jsonResponse = await response.json();
-    console.log(jsonResponse)
+    return response;
 }
