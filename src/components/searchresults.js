@@ -1,11 +1,7 @@
-import Track from './track'
-const Searchresults = ({songs}) => {
+import Tracklist from './tracklist'
+const Searchresults = ({songs, onAdd}) => {
     return (
-    <div className="songs_results">
-      {songs.map(song => 
-      <Track song={song} />      
-    )}
-    </div>
+      <Tracklist songs={songs} onAdd={onAdd} />      
   )
 }
 

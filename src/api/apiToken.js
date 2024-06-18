@@ -1,4 +1,4 @@
-export const clientId = ''; 
+export const clientId = '63f74899ca954c22aa8844c796fdfbbc'; 
 
 
 const redirectUrl = 'http://localhost:3000';
@@ -41,8 +41,6 @@ export async function redirectToAuthCodeFlow(clientId) {
     redirect_uri: redirectUrl
   });
 
-  console.log(params.toString())
-
   document.location = `https://accounts.spotify.com/authorize?${params.toString()}`;
 }
 
@@ -63,10 +61,9 @@ export async function getAccessToken(clientId, code) {
     })
   });
   const data = await response.json();
-  console.log(data);
+  
   if (!(Date.now() >= data.expires_in * 1000)) {
     const refreshToken = getRefreshToken()
-    console.log(refreshToken)
   } else {
     return data.access_token
   }

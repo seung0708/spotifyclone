@@ -1,8 +1,9 @@
-import React, {useEffect, useState, useRef} from 'react'
+import React, {useEffect, useState, useCallback, useRef} from 'react'
 import { redirectToAuthCodeFlow, code, clientId, getAccessToken, fetchProfile } from './api/apiToken';
 import { searchTrackApi } from './api/searchApi';
 import Searchbar from './components/searchbar';
 import Searchresults from './components/searchresults'
+import Playlist from './components/playlist';
 import './App.css';
 
 function App() {
@@ -10,11 +11,24 @@ function App() {
   const [token, setToken] = useState(null);
   const [profile, setProfile] = useState(null);
   const [songs, setSongs] = useState([]);
+  const [playlist, setPlaylist] = useState([]);
+  const [playlistName, setPlaylistName] = useState('New Playlist')
   const hasFetchedData = useRef(false);
 
   const handleChange = (e) => {
     setTerm(e.target.value)
   }
+
+  const addTrack = useCallback(
+    (song) => {
+      if (playlist.some(prevSong => prevSong.id === song.id)) {
+        return;
+      }
+      setPlaylist([...songs, song]);
+    },
+    [playlist]
+  );
+
 
   const handleSearch = async(e) => {
     e.preventDefault();
@@ -49,14 +63,22 @@ function App() {
     (
       <div className='App'>
         {profile ? (
-          <>
-          <h1>Welcome, {profile.display_name}</h1>
-          <Searchbar 
-            onChange={handleChange}
-            onSearch={handleSearch}
-          />
-          <Searchresults songs={songs} />
-          </>
+          <div>
+            <div>
+              <h1>Welcome, {profile.display_name}</h1>
+              <Searchbar 
+                onChange={handleChange}
+                onSearch={handleSearch}
+              />
+            </div>
+            <div style={{display: 'flex', justifyContent: 'center', gap: '5rem'}}>
+              <Searchresults songs={songs} onAdd={addTrack} />
+              <Playlist 
+                playlistName={playlistName}
+                playlist={playlist}
+              />
+            </div>
+          </div>
         ): 
         (
           <p>Loading...</p>
