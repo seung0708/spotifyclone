@@ -21,12 +21,9 @@ function App() {
 
   const addTrack = useCallback(
     (song) => {
-      if (playlist.some(prevSong => prevSong.id === song.id)) {
-        return;
-      }
-      setPlaylist([...songs, song]);
+      setPlaylist(prevPlaylist => [...prevPlaylist, song]);
     },
-    [playlist]
+    []
   );
 
 
