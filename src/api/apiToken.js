@@ -1,4 +1,4 @@
-export const clientId = '63f74899ca954c22aa8844c796fdfbbc'; 
+export const clientId = ''; 
 
 
 const redirectUrl = 'http://localhost:3000';
