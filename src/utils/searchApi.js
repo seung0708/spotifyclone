@@ -1,3 +1,8 @@
+export const searchTrack = (tracks, term) => {
+    return tracks.map(track => console.log(track) )
+}
+
+
 export const searchTrackApi = async (access_token, term) => {
     const response = await fetch(`https://api.spotify.com/v1/search?type=track&q=${term}`, {
         headers: {

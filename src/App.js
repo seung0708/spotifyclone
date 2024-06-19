@@ -1,7 +1,7 @@
 import React, {useEffect, useState, useCallback, useRef} from 'react'
-import { redirectToAuthCodeFlow, code, clientId, getAccessToken, fetchProfile } from './api/apiToken';
-import {saveToSpotify} from './api/saveToSpotify'
-import { searchTrackApi } from './api/searchApi';
+import { redirectToAuthCodeFlow, code, clientId, getAccessToken, fetchProfile } from './utils/apiToken';
+import {saveToSpotify} from './utils/saveToSpotify'
+import { searchTrackApi } from './utils/searchApi';
 import Searchbar from './components/searchbar';
 import Searchresults from './components/searchresults'
 import Playlist from './components/playlist';
@@ -78,15 +78,15 @@ function App() {
     (
       <div className='App'>
         {profile ? (
-          <div>
-            <div>
+          <>
+            <header>
               <h1>Welcome, {profile.display_name}</h1>
               <Searchbar 
                 onChange={handleChange}
                 onSearch={handleSearch}
               />
-            </div>
-            <div style={{display: 'flex', justifyContent: 'center', gap: '5rem'}}>
+            </header>
+            <main style={{display: 'flex', justifyContent: 'center', gap: '5rem'}}>
               <Searchresults songs={songs} onAdd={addTrack} />
               <Playlist 
                 playlistName={playlistName}
@@ -95,8 +95,8 @@ function App() {
                 onNameChange={updatePlaylistName}
                 onSave={savePlaylist}
               />
-            </div>
-          </div>
+            </main>
+          </>
         ): 
         (
           <p>Loading...</p>

@@ -1,8 +1,8 @@
 import '../styles/searchbar.css'
-const Searchbar = ({onChange, onSearch}) => {
+const Searchbar = (props) => {
   return (
-      <form onSubmit={onSearch}>
-        <input onChange={onChange} className="searchbar" placeholder="What do you want to play?" />
+      <form>
+        <input className="searchbar" placeholder="What do you want to play?" />
       </form>
   )
 }

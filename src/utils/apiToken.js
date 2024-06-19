@@ -1,6 +1,4 @@
 export const clientId = ''; 
-
-
 const redirectUrl = 'http://localhost:3000';
 const params = new URLSearchParams(window.location.search);
 export const code = params.get("code")
